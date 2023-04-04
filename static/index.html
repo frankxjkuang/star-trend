@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            font-size: 18px;
+        }
+
+        .body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        form {
+            font-size: 18px;
+        }
+
+        #repository {
+            width: 280px;
+            height: 30px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .btn {
+            height: 50px;
+            width: 200px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #code {
+            text-align: left;
+            display: block;
+            background-color: black;
+            color: white;
+            width: 80%;
+            line-height: 30px;
+            font-size: 12px;
+        }
+
+        .chart {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="body">
+    <div class="search">
+        <form class="flex-box" method="POST">
+            <p>
+                <label for="repository">Repository:</label>
+                <input type="text" id="repository" name="repository" value="{{ .Repo.FullName }}"
+                       placeholder=" frankxjkuang/star-trend" autofocus="true">
+            </p>
+            <input type="submit" value="Submit" class="btn">
+        </form>
+    </div>
+
+    <div class="slogan flex-box">
+        <p>
+            {{ if gt .Repo.StargazersCount 0 }}
+            <b>Awesome!</b>
+            <a href="https://github.com/{{ .Repo.FullName }}">{{ .Repo.FullName }}</a>
+            was created in <b>{{ .Repo.CreateAtFormat }}</b>
+            and already has <b>{{ .Repo.StargazersCount }}</b> stars.
+            {{ else if ne .ErrorMsg "" }}
+            <b>{{ .ErrorMsg }}</b>
+            {{ end }}
+        </p>
+    </div>
+
+    {{ if gt .Repo.StargazersCount 0 }}
+    <div class="code flex-box">
+        <p>
+            You can include the chart on your repository's
+            <b>README.md</b>
+            as follows:
+        </p>
+
+        <code class="markdown" id="code">
+## Stargazers over time
+            <br>
+[![Stargazers over time](http://127.0.0.1:9000/{{ .Repo.FullName }})](http://127.0.0.1:9000/{{ .Repo.FullName }})
+        </code>
+    </div>
+    <div class="chart flex-box">
+        <img src="{{.Repo.FullName}}" alt="Please try again in a few minutes.">
+    </div>
+    {{ else if eq .ErrorMsg "" }}
+    <div class="footer flex-box">
+        <p>
+            This repo is still waiting for star.
+        </p>
+    </div>
+    {{ end }}
+</div>
+
+</body>
+</html>
